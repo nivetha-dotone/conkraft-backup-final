@@ -119,7 +119,9 @@ public class ReportsController {
 	@ResponseBody
 	public Map<String, Object> fetchModuleData(@RequestParam String contractorId,
 	                                           @RequestParam String unitId,
-	                                           @RequestParam String reportType) {
+	                                           @RequestParam String reportType,
+	                                           @RequestParam(value = "startDate", required = false) String startDate,
+	                                           @RequestParam(value = "endDate", required = false) String endDate) {
 	    Map<String, Object> response = new HashMap<>();
 	    List<Map<String, String>> rows = new ArrayList<>();
 	    List<String> columns = new ArrayList<>();
@@ -127,7 +129,7 @@ public class ReportsController {
 	    switch (reportType) {
         case "contractWorkmenReport":
 	    
-	    List<ContractWorkmenReportDTO> workmen =workmenService.getContractWorkmenReportData(unitId, contractorId);
+	    List<ContractWorkmenReportDTO> workmen =workmenService.getContractWorkmenReportData(unitId, contractorId,startDate,endDate);
 
 	    columns = Arrays.asList("Gate Pass Type","Gate Pass Id","First Name","Last Name","Relative Name","DOJ","Birth Date","Phone 1","Address","Employment Status","DOT","Reasoning",
 	            "Unit Code","Unit Name","Main Contractor Code","Main Contractor Name","Sub Contractor Code","Sub Contractor Name","SAP Workorder Number","Department","Section",

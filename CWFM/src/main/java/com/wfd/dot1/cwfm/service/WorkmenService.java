@@ -159,7 +159,7 @@ public interface WorkmenService {
 
 	public Map<String, Object> getWorkmenDetailsByAadhar(String aadharNumber);
 
-	List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId, String contractorId);
+	List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId, String contractorId, String startDate, String endDate);
 
 	public List<ContractWorkmenReportDTO> getInactiveWorkmenReportData(String unitId, String contractorId);
 

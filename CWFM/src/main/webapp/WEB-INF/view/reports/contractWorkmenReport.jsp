@@ -271,7 +271,7 @@
    
 <div class="page-header">
 <input type="hidden" id="loggedInUserAccount" value="${sessionScope.loginuser.userAccount}">
-  <label for="principalEmployerId" style="color: darkcyan;">Principal Employer:</label> 
+  <label for="principalEmployerId" style="color: darkcyan;">PrincipalEmployer:</label> 
   <select class="custom-select" id="principalEmployers" name="principalEmployerId" onchange="getContractorsForReports(this.value, document.getElementById('loggedInUserAccount').value)" style="color:gray;padding:3px;">
                                 <option value="">Please select Principal Employer</option>
                                 
@@ -287,9 +287,9 @@
                                 </select>
                             
                           <label for="deptId" style="color: darkcyan;">Contractor:</label>
-<input type="hidden" id="autoSearchFunction" value="fetchReportData">
+<input type="hidden" id="autoSearchFunction">
 <input type="hidden" id="autoSearchParam" value="">
-                            <select class="custom-select" id="contractors" name="contractors" onchange="fetchReportData()" style="color:gray;padding:3px;">
+                            <select class="custom-select" id="contractors" name="contractors"  style="color:gray;padding:3px;">
             						<option value="">Please select Contractor</option>
 									<c:forEach var="contr" items="${Contractors}">
 										
@@ -299,8 +299,9 @@
         						</select>
         						
         						<label id="error-contractor"style="color: red;display: none;">Contractor is required</label>
-        				
-    
+        				<label for="startDate" style="color: darkcyan;">FromDate:</label>	<input id="startDate" name="startDate" class="datetimepickerformat2"  type="text" size="30" autocomplete="off">
+        				<label for="endDate" style="color: darkcyan;">ToDate:</label>	<input id="endDate" name="endDate" class="datetimepickerformat2"  type="text" size="30" autocomplete="off">
+    <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="fetchReportData()">Search</button>
    <div class="page-header-buttons">
        <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="reportModuleCSV()">Export</button> 
          <button type="button" class="btn btn-default process-footer-button-cancel ng-binding" onclick=" loadCommonList('/reports/list', 'Contract Workmen Report');">Cancel</button>

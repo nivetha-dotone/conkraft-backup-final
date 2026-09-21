@@ -4368,10 +4368,10 @@ private String getContractWorkmenReportQuery() {
 	return QueryFileWatcher.getQuery("GET_CONTRACTOR_WORKMEN_REPORT");
 }
 @Override
-public List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId, String contractorId) {
+public List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId, String contractorId,String startDate,String endDate) {
     //String sql = "EXEC dbo.usp_GetApprovedGatePassExportDetails @UnitId = ?, @ContractorId = ?";
     String sql =getContractWorkmenReportQuery();
-    return jdbcTemplate.query(sql, new Object[] { Long.parseLong(unitId), Long.parseLong(contractorId) },
+    return jdbcTemplate.query(sql, new Object[] { Long.parseLong(unitId), Long.parseLong(contractorId),startDate,endDate},
             new RowMapper<ContractWorkmenReportDTO>() {
                 @Override
                 public ContractWorkmenReportDTO mapRow(ResultSet rs, int rowNum) throws SQLException {

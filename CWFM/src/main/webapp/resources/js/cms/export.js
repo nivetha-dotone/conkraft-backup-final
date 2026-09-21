@@ -144,7 +144,8 @@ function toggleExportSelectAll() {
 
 	       let unitId = $('#principalEmployers').val();
 	       let reportType = "contractWorkmenReport";
-
+           let startDate = $('#startDate').val();
+           let endDate = $('#endDate').val();
 	       //if (!module) return;
 
 	       let contractorId = $('#contractors option:selected').val();
@@ -155,7 +156,9 @@ function toggleExportSelectAll() {
 	           data: {
 	               contractorId: contractorId,
 	               unitId: unitId,
-	               reportType: reportType
+	               reportType: reportType,
+	               startDate:startDate,
+	               endDate:endDate
 	           },
 	           success: function (response) {
 

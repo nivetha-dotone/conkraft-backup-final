@@ -1919,9 +1919,9 @@ public class WorkmenServiceImpl implements WorkmenService{
 	}
 	
 	@Override
-	public List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId,String contractorId) {
+	public List<ContractWorkmenReportDTO> getContractWorkmenReportData(String unitId,String contractorId,String startDate,String endDate) {
 		// TODO Auto-generated method stub
-		return workmenDao.getContractWorkmenReportData(unitId,contractorId);
+		return workmenDao.getContractWorkmenReportData(unitId,contractorId,startDate,endDate);
 	}
 	@Override
 	public List<ContractWorkmenReportDTO> getInactiveWorkmenReportData(String unitId,String contractorId) {
