@@ -183,20 +183,7 @@
         padding: 6px; /* Reduced padding for table header */
     }
 
-    .page-header {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start; /* Align elements to the left */
-    gap: 10px;  /* Distribute space between search and buttons */
-        padding: 8px; /* Adjust padding */
-        background-color: #FFFFFF; /* White background */
-        border-bottom: 1px solid #ccc; /* Subtle border for separation */
-    }
 
-    .page-header > div {
-        display: flex;
-        gap: 10px; /* Space between buttons */
-    }
 
     @media (max-width: 768px) {
         .page-header {
@@ -213,11 +200,11 @@
             width: 100%; /* Full width for small screens */
         }
 
-        .page-header > div {
+         .page-header > div {
             width: 100%; /* Full width for small screens */
             margin-top: 10px; /* Add space above buttons */
             flex-direction: column; /* Stack buttons vertically */
-        }
+        } 
     }
     .header-text-new {
         font-family: 'Noto Sans', Arial, sans-serif; /* Font family similar to grid header */
@@ -257,11 +244,46 @@
     background-color: #ffe5e5;
     border-top: none;
 }
-  .page-header-buttons {
-    margin-left: auto;      /* <<< THIS moves the buttons to the right */
+ .page-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+}
+
+.page-header label {
+    white-space: nowrap;
+    color: darkcyan;
+    font-weight: 600;
+}
+
+#principalEmployers {
+    width: 200px;
+}
+
+#contractors {
+    width: 180px;
+}
+
+#startDate,
+#endDate {
+    width: 140px;
+    min-width: 140px;
+    color:gray;
+}
+
+.page-header-buttons {
+    margin-left: auto;
     display: flex;
     gap: 10px;
-}  
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
     </style>	
   <script src="resources/js/cms/export.js"></script>
    <script src="resources/js/cms/workmen.js"></script>
@@ -300,7 +322,7 @@
         						
         						<label id="error-contractor"style="color: red;display: none;">Contractor is required</label>
         				<label for="startDate" style="color: darkcyan;">FromDate:</label>	<input id="startDate" name="startDate" class="datetimepickerActiveWorkmenformat"  type="text" size="30" autocomplete="off">
-        				<label for="endDate" style="color: darkcyan;">ToDate:</label>	<input id="endDate" name="endDate" class="datetimepickerActiveWorkmenformat"  type="text" size="30" autocomplete="off">
+        				<label for="endDate" style="color: darkcyan;">ToDate:</label>	<input id="endDate" name="endDate" class="datetimepickerActiveWorkmenformat"    type="text" size="30" autocomplete="off">
     <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="fetchReportData()">Search</button>
    <div class="page-header-buttons">
        <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="reportModuleCSV()">Export</button> 
