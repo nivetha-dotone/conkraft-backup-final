@@ -41,4 +41,6 @@ public interface DepartmentMappingDao {
 			boolean TradeexistsInGatePass(DeptMapping mapping);
 
 			void deleteTradeMapping(DeptMapping mapping);
+
+			boolean plantDepartmentMappingExists(Integer unitId, Integer departmentId);
 }

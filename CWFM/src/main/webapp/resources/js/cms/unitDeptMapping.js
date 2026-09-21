@@ -401,52 +401,156 @@ $.ajax({
 });
 
 }
+var selectedRows = {};
+function TradeSkillMapppingExportToCSV() {
 
- function TradeSkillMapppingExportToCSV() {
-            var selectedRows = document.querySelectorAll('input[name="selectedWOs"]:checked');
-            if (selectedRows.length === 0) {
-                alert("Please select at least one record to export.");
-                return;
-            }
+    var table = $('#workmenTable').DataTable();
 
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Principal Employer,Trade,Skill,Workmen Count\n"; // Add headers here
-            selectedRows.forEach(function(row) {
-                var rowData = row.parentNode.parentNode.querySelectorAll('td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5)'); // Adjust column indices as needed
-                var rowArray = [];
-                rowData.forEach(function(cell) {
-                    rowArray.push(cell.innerText);
-                });
-                csvContent += rowArray.join(",") + "\n";
-            });
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "TradeSkillMappping.csv");
-            document.body.appendChild(link);
-            link.click();
+    var csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Principal Employer,Trade,Skill,Workmen Count\n";
+
+    var selectedCount = 0;
+
+    table.rows().every(function () {
+
+        var row = $(this.node());
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.tradeId').val() + "_" +
+            row.find('.skillId').val();
+
+        if (selectedRows[key]) {
+
+            selectedCount++;
+
+            csvContent +=
+                row.find('td:eq(1)').text().trim() + "," +
+                row.find('td:eq(2)').text().trim() + "," +
+                row.find('td:eq(3)').text().trim() + "," +
+                row.find('td:eq(4)').text().trim() + "\n";
         }
- function DepartmentAreaMapppingExportToCSV() {
-            var selectedRows = document.querySelectorAll('input[name="selectedDeptAreas"]:checked');
-            if (selectedRows.length === 0) {
-                alert("Please select at least one record to export.");
-                return;
-            }
+    });
 
-            var csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Principal Employer,Department,Sub Department\n"; // Add headers here
-            selectedRows.forEach(function(row) {
-                var rowData = row.parentNode.parentNode.querySelectorAll('td:nth-child(2), td:nth-child(3), td:nth-child(4)'); // Adjust column indices as needed
-                var rowArray = [];
-                rowData.forEach(function(cell) {
-                    rowArray.push(cell.innerText);
-                });
-                csvContent += rowArray.join(",") + "\n";
-            });
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "DepartmentSubdepartmentMappping.csv");
-            document.body.appendChild(link);
-            link.click();
+    if (selectedCount === 0) {
+        alert("Please select at least one record to export.");
+        return;
+    }
+
+    var encodedUri = encodeURI(csvContent);
+
+    var link = document.createElement("a");
+    link.href = encodedUri;
+    link.download = "TradeSkillMappping.csv";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+var selectedDeptAreaRows = {};
+function DepartmentAreaMapppingExportToCSV() {
+
+    var table = $('#workmenTable').DataTable();
+
+    var csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Principal Employer,Department,Sub Department\n";
+
+    var selectedCount = 0;
+
+    table.rows().every(function () {
+
+        var row = $(this.node());
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.departmentId').val() + "_" +
+            row.find('.subDepartmentId').val();
+
+        if (selectedDeptAreaRows[key]) {
+
+            selectedCount++;
+
+            var principalEmployer = row.find('td:eq(1)').text().trim();
+            var department = row.find('td:eq(2)').text().trim();
+            var subDepartment = row.find('td:eq(3)').text().trim();
+
+            csvContent += principalEmployer + "," +
+                          department + "," +
+                          subDepartment + "\n";
         }
+    });
+
+    if (selectedCount === 0) {
+        alert("Please select at least one record to export.");
+        return;
+    }
+
+    var encodedUri = encodeURI(csvContent);
+
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "DepartmentSubdepartmentMappping.csv");
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+} 
+   
+   
+        $('#workmenTable').on('draw.dt', function () {
+
+    var table = $('#workmenTable').DataTable();
+
+    table.rows({ page: 'current' }).every(function () {
+
+        var row = $(this.node());
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.departmentId').val() + "_" +
+            row.find('.subDepartmentId').val();
+
+        row.find('input[name="selectedDeptAreas"]')
+           .prop('checked', selectedDeptAreaRows[key] || false);
+    });
+});
+        
+        $('#workmenTable').on('draw.dt', function () {
+
+    var table = $('#workmenTable').DataTable();
+
+    table.rows({ page: 'current' }).every(function () {
+
+        var row = $(this.node());
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.tradeId').val() + "_" +
+            row.find('.skillId').val();
+
+        row.find('input[name="selectedWOs"]')
+           .prop('checked', selectedRows[key] || false);
+    });
+});
+$(document).on('change', 'input[name="selectedWOs"]', function () {
+
+    var row = $(this).closest('tr');
+
+    var key =
+        row.find('.principalEmployerId').val() + "_" +
+        row.find('.tradeId').val() + "_" +
+        row.find('.skillId').val();
+
+    selectedRows[key] = this.checked;
+});
+$(document).on('change', 'input[name="selectedDeptAreas"]', function () {
+
+    var row = $(this).closest('tr');
+
+    var key =
+        row.find('.principalEmployerId').val() + "_" +
+        row.find('.departmentId').val() + "_" +
+        row.find('.subDepartmentId').val();
+
+    selectedDeptAreaRows[key] = this.checked;
+});

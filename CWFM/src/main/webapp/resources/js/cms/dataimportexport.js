@@ -300,6 +300,9 @@ function downloadErrorCSV(errorData, uploadedFileName) {
            case "data-intra plant transfer":
                 headers =  ["GatepassId","Plant Code","Contractor Code","Department","Area","EIC Number","Workorder","WC/ESIC","LL Number","ESIC","Effective From Date"];
                 break;
+           case "data-safety training":
+                headers =  ["Plant Code","Department","Training Type","Training Name"];
+                break;
             default:
                 alert("Template configuration not found for: " + selectedText);
                 return;
@@ -580,7 +583,10 @@ const tableBody = document.getElementById("tableBody");
             headers = ["GatepassId","Plant Code","Contractor Code","Department","Area","EIC Number","Workorder","WC/ESIC","LL Number","ESIC","Effective From Date"];
             fieldMap = ["gatepassNumber","unitCode","contractorCode","department","area","eicNumber","workorderNumber","wcesicNumber","llNumber","esicNumber","effectiveFrom"];
         }
-        
+         else if (templateType === "Data-Safety Training") {
+            headers = ["Plant Code","Department","Training Type","Training Name"];
+            fieldMap = ["plantCode","department","trainingType","trainingName"];
+        }
        // const checkTh = document.createElement("th");
        // checkTh.style.border = "1px solid #ddd";
        // checkTh.innerHTML = `<input type="checkbox" id="selectAll">`;
@@ -905,6 +911,10 @@ function getHeadersByTemplate(selectedText) {
        
         case "data-intra plant transfer":
                 return  ["GatepassId","Plant Code","Contractor Code","Department","Area","EIC Number","Workorder","WC/ESIC","LL Number","ESIC","Effective From Date"];
+        
+        case "data-safety training":
+            return  ["Plant Code","Department","Training Type","Training Name"];
+        
         default:
             return [];
     }

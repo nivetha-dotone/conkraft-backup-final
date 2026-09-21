@@ -266,4 +266,8 @@ public interface FileUploadDao {
 	GatePassMain getAllDeatilsOfWorkmenBasedOnGatePass(String gatepassId);
 
 	void insertSamePlantDiffContIntraPlantTransfer(GatePassMain gm, String createdBy, String dot);
+
+	boolean checkTrainingDetailsExists(Integer unitId, String department, String trainingType, String trainingName);
+
+	void saveTrainingDetails(Integer unitId, String department, String trainingType, String trainingName);
 }

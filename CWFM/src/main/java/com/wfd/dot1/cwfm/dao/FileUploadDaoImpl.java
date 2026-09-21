@@ -549,6 +549,9 @@ public class FileUploadDaoImpl implements FileUploadDao {
             	return "First Name,Last Name,Login Id,Password,Email Address,Mobile Number,Plant Code,Organisation,Department,Area,Role,SAP Vendor Code";
             case "Data-Intra Plant Transfer":
             	return "GatepassId,Plant Code,Contractor Code,Department,Area,EIC Number,Workorder,WC/ESIC,LL Number,ESIC,Effective From Date";
+            case "Data-Safety Training":
+            	return "Plant Code,Department,Training Type,Training Name";
+            
             default:
                 // fallback/default template
                 return "Template is Not Found to Download";
@@ -4050,5 +4053,17 @@ public class FileUploadDaoImpl implements FileUploadDao {
 	          // Rethrow so parent transaction rolls back
 	          throw new RuntimeException("CMSPERSONCUSTOMDATA insert failed",e);
 	      }
+		}
+	@Override
+	public boolean checkTrainingDetailsExists(Integer unitId, String department,String trainingType,String trainingName) {
+		//String sql=trioexistsMapping();
+		String sql = "select count(*) from CMSTRAININGDETAILS where UNIT_ID=? and DEP_NAME=? and TRAINING_TYPE=? and TRAINING_NAME=?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, unitId, department,trainingType,trainingName);
+        return count != null && count > 0;
+	}
+	@Override 
+	public void saveTrainingDetails( Integer unitId, String department, String trainingType, String trainingName) { 
+		String sql = "INSERT INTO CMSTRAININGDETAILS (UNIT_ID, DEP_NAME, TRAINING_TYPE, TRAINING_NAME,MANDATORY) VALUES (?, ?, ?, ?,'YES')";
+		jdbcTemplate.update( sql, unitId, department, trainingType,trainingName );
 		}
 }

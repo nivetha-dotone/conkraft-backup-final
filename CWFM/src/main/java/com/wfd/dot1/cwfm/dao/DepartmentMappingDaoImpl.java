@@ -248,6 +248,13 @@ public class DepartmentMappingDaoImpl implements DepartmentMappingDao{
 	                mapping.getTradeId(),
 	                mapping.getSkillId());
 	    }
+		@Override
+		public boolean plantDepartmentMappingExists(Integer unitId, Integer departmentId) {
+			//String sql=trioexistsMapping();
+			String sql = "SELECT COUNT(*) FROM UnitDepartmentMapping WHERE principalEmployerId = ? AND departmentId = ? ";
+	        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, unitId, departmentId);
+	        return count != null && count > 0;
+		}
 	}
 	
 	

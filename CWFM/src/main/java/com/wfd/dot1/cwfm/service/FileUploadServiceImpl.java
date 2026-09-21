@@ -206,6 +206,12 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
                  savedData = processIntraPlantTransfer(reader,userAccount,createdBy);
                  break;
+            case "Data-Safety Training":
+                if (!headerLine.equalsIgnoreCase("Plant Code,Department,Training Type,Training Name")) {
+                    throw new Exception("File can not upload due to incorrect format.");
+                }
+                savedData = processSafetyTraining(reader, userAccount,createdBy);
+                break;
             default:
                 throw new Exception("Unsupported template type: " + templateType);
         }
@@ -3504,6 +3510,102 @@ private Map<String, Object> processIntraPlantTransfer(BufferedReader reader, Str
     result.put("errorData", errorData);
     return result;
 }
+private Map<String, Object> processSafetyTraining(BufferedReader reader,String userAccount,String createdBy) throws IOException {
+  	 List<Map<String, Object>> successData = new ArrayList<>();
+       List<Map<String, Object>> errorData = new ArrayList<>();
 
+       String line;
+       int rowNum = 0;
+       String[] fieldNames = {"plantCode", "department","trainingType","trainingName"};
+              
+       Set<String> mandatoryFields = Set.of("plantCode", "department","trainingType","trainingName");
+
+           while ((line = reader.readLine()) != null) {
+               rowNum++;
+               line = line.replaceAll("[\\x00-\\x1F\\x7F]", "");
+
+               if (line.trim().isEmpty()) continue;
+
+               String[] rawFields = line.split(",", -1);
+               String[] fields = new String[rawFields.length];
+               for (int i = 0; i < rawFields.length; i++) {
+                   fields[i] = rawFields[i].trim().replaceAll("\"", "");
+               }
+
+               Map<String, String> fieldErrors = new LinkedHashMap<>();
+
+               if (fields.length < 4) {
+                   errorData.add(Map.of("row", rowNum, "error", "Insufficient number of fields"));
+                   continue;
+               }
+
+               // Check mandatory fields
+               for (int i = 0; i < fieldNames.length; i++) {
+                   if (mandatoryFields.contains(fieldNames[i]) && fields[i].isBlank()) {
+                       fieldErrors.put(fieldNames[i], "is mandatory");
+                   }
+               }
+              
+               if (!fieldErrors.isEmpty()) {
+                   errorData.add(Map.of("row", rowNum, "fieldErrors", fieldErrors));
+                   continue;
+               }
+                   String plantCode = fields[0];
+                   String department = fields[1];
+                   String trainingType = fields[2];
+                   String trainingName = fields[3];
+                   try {
+                   // Get unitId from plant code
+                   Integer unitId = fileUploadDao.getUnitIdByName(plantCode);
+                   if (unitId == null || unitId == 0) {
+                       fieldErrors.put("PlantCode" ,"Plant Code "+ plantCode + " not found");
+                   }
+
+                   // Check  department exists 
+                   Integer departmentId = fileUploadDao.getGeneralMasterId("Department", department);
+                   if (departmentId == null || departmentId == 0) {
+                   	//departmentId = fileUploadDao.insertGeneralMaster("Department", department);
+                	   fieldErrors.put("Department" ,"Department "+ department  + " not found");
+                   }
+
+                   // Check plant department mapping exists
+                   if (unitId != null && unitId != 0 && departmentId != null && departmentId != 0) {
+                    boolean mappingExists = deptMapDao.plantDepartmentMappingExists(unitId, departmentId);
+                    if (!mappingExists) {
+                       fieldErrors.put("PlantCode,Department" ,"Mapping not exists for "+ department  + " with " + plantCode);
+                    }
+                   } 
+                   //check training details mapping exists
+                   if (unitId != null && unitId != 0 && departmentId != null && departmentId != 0) {
+                    boolean trainingDetailsExists = fileUploadDao.checkTrainingDetailsExists(unitId, department,trainingType,trainingName);
+                    if (trainingDetailsExists) {
+                	   //errorData.add(Map.of( "row", rowNum, "error", "Training details already exists for PlantCode '" + plantCode + "', Department '" + department + "', TrainingType '" + trainingType + "', TrainingName '" + trainingName + "'" )); 
+                       fieldErrors.put("Duplicates" ,"Training details already exists for PlantCode "+ plantCode + ", Department " + department + ", TrainingType " + trainingType + ", TrainingName " + trainingName);
+                    }
+                   }
+                   if (!fieldErrors.isEmpty()) {
+                       errorData.add(Map.of("row", rowNum, "fieldErrors", fieldErrors));
+                       continue;
+                   }
+                	   
+                   fileUploadDao.saveTrainingDetails(unitId, department,trainingType,trainingName);
+                   
+                   // ✅ Success
+                   Map<String, Object> map = new HashMap<>();
+                   map.put("plantCode",plantCode );
+                   map.put("department", department);
+                   map.put("trainingType", trainingType);
+                   map.put("trainingName", trainingName);
+
+                   successData.add(map);
+                   
+               }catch(Exception e) {
+            	   errorData.add(Map.of( "row", rowNum, "error", "Error processing row: " + e.getMessage() ));
+               }
+           }
+           Map<String, Object> result = new HashMap<>();
+           result.put("successData", successData);
+           result.put("errorData", errorData);
+           return result;
+  }
 }
-

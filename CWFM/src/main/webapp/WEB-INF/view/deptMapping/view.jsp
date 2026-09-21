@@ -167,8 +167,24 @@
 </style>
 <script>
 function toggleSelectAllDeptArea() {
-    const checkboxes = document.querySelectorAll('input[name="selectedDeptAreas"]');
-    checkboxes.forEach(checkbox => checkbox.checked = document.getElementById('selectAllCheckbox').checked);
+
+    var table = $('#workmenTable').DataTable();
+    var checked = $('#selectAllCheckbox').prop('checked');
+
+    table.rows({ search: 'applied' }).every(function () {
+
+        var row = $(this.node());
+
+        row.find('input[name="selectedDeptAreas"]')
+           .prop('checked', checked);
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.departmentId').val() + "_" +
+            row.find('.subDepartmentId').val();
+
+        selectedDeptAreaRows[key] = checked;
+    });
 }
 </script>
 </head>

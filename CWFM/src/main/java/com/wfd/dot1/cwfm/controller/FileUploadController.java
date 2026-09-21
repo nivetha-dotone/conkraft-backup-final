@@ -430,6 +430,17 @@ public class FileUploadController {
             fields.add(Map.of("name", "Effective From Date", "type", "Text", "example", "2026/05/29"));
             
             templateInfo.put("fields", fields);
+        }else if("Data-Safety Training".equals(templateType)){
+        	templateInfo.put("title", "Data-Safety Training Event");
+            templateInfo.put("description", "Imports Safety Training events.");
+
+            List<Map<String, String>> fields = new ArrayList<>();
+            fields.add(Map.of("name", "Plant Code", "type", "Text", "example", "CODE001"));
+            fields.add(Map.of("name", "Department", "type", "Text", "example", "Safety"));
+            fields.add(Map.of("name", "Training Type", "type", "Text", "example", "L3"));
+            fields.add(Map.of("name", "Training Name", "type", "Text", "example", "HSE TRAINING"));
+            
+            templateInfo.put("fields", fields);
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

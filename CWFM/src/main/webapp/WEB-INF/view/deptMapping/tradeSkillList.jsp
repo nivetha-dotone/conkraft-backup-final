@@ -166,9 +166,24 @@
     }
 </style>
 <script>
-function toggleSelectAllGMTYPE() {
-    const checkboxes = document.querySelectorAll('input[name="selectedWOs"]');
-    checkboxes.forEach(checkbox => checkbox.checked = document.getElementById('selectAllCheckbox').checked);
+function toggleSelectAllTradeSkill() {
+
+    var table = $('#workmenTable').DataTable();
+    var checked = $('#selectAllCheckbox').prop('checked');
+
+    table.rows({ search: 'applied' }).every(function () {
+
+        var row = $(this.node());
+
+        row.find('input[name="selectedWOs"]').prop('checked', checked);
+
+        var key =
+            row.find('.principalEmployerId').val() + "_" +
+            row.find('.tradeId').val() + "_" +
+            row.find('.skillId').val();
+
+        selectedRows[key] = checked;
+    });
 }
 </script>
 </head>
@@ -215,7 +230,7 @@ function toggleSelectAllGMTYPE() {
         <thead>
 <tr >
                     <td >
-                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllGMTYPE()">
+                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllTradeSkill()">
                     </td> 
                     <!-- Add more table headers for each column -->
                     <th class="header-text"  onclick="sortTable(1)"><spring:message code="label.principalEmployer"/><span id="sortIndicatorName" class="sort-indicator sort-asc">&#x25B2;</span></th>
