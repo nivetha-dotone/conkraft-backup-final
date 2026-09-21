@@ -4243,6 +4243,23 @@ $(".contractFromdatetimepicker").datepicker({
 
     defaultDate: 0 // optional → sets today as default
 });
+
+
+const threeYearsAgo = new Date();
+threeYearsAgo.setFullYear(today.getFullYear() - 3);
+
+const threeYearsLater = new Date();
+threeYearsLater.setFullYear(today.getFullYear() + 3);
+
+$(".datetimepickerActiveWorkmenformat").datepicker({
+    dateFormat: "yy-mm-dd",
+    changeMonth: true,
+    changeYear: true,
+    minDate: threeYearsAgo,
+    maxDate: threeYearsLater,
+    yearRange: (today.getFullYear() - 3) + ":" + (today.getFullYear() + 3)
+});
+
 }
 
 function validatePfForm11Requirement() {

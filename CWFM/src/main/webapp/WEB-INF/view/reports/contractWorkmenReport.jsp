@@ -299,8 +299,8 @@
         						</select>
         						
         						<label id="error-contractor"style="color: red;display: none;">Contractor is required</label>
-        				<label for="startDate" style="color: darkcyan;">FromDate:</label>	<input id="startDate" name="startDate" class="datetimepickerformat2"  type="text" size="30" autocomplete="off">
-        				<label for="endDate" style="color: darkcyan;">ToDate:</label>	<input id="endDate" name="endDate" class="datetimepickerformat2"  type="text" size="30" autocomplete="off">
+        				<label for="startDate" style="color: darkcyan;">FromDate:</label>	<input id="startDate" name="startDate" class="datetimepickerActiveWorkmenformat"  type="text" size="30" autocomplete="off">
+        				<label for="endDate" style="color: darkcyan;">ToDate:</label>	<input id="endDate" name="endDate" class="datetimepickerActiveWorkmenformat"  type="text" size="30" autocomplete="off">
     <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="fetchReportData()">Search</button>
    <div class="page-header-buttons">
        <button type="button" id="exportBtn"  class="btn btn-default process-footer-button-cancel ng-binding" onclick="reportModuleCSV()">Export</button> 
